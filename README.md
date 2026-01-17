@@ -99,3 +99,29 @@ export LLM_MODEL=llama3.1:8b
 
 The web-context node queries OpenAlex and Semantic Scholar. Network access is required; if searches
 fail, the report will include a note describing the limitation.
+
+## Example: Input to Output (Transistor Process Run)
+
+Inputs used for `artifacts/run_20260110T075312Z_53f549c0`:
+
+- Data: `examples/complex/transistor_process_data.csv`
+- Description: `examples/complex/transistor_experiment_description.md`
+
+Command:
+```bash
+PYTHONPATH=src python -m graduate_assist.run \
+  --data examples/complex/transistor_process_data.csv \
+  --description examples/complex/transistor_experiment_description.md \
+  --artifacts artifacts
+```
+
+Selected output highlights (from `artifacts/run_20260110T075312Z_53f549c0/report.md`):
+
+- Kruskal-Wallis test for on-resistance across channel materials: H=9.26, p=0.0098.
+- Dunn post hoc: Si vs material_x p=0.0256 (Si vs SiC p=0.0964; SiC vs material_x p=1.0).
+- Median improvements for material_x vs Si: Idsat +19.7%, gm +19.7%, mobility +37.6%,
+  Ioff -32.1%, DIBL -30.2%, subthreshold swing -13.6%, Ron -27.0%.
+
+Example figure (renders if the artifact exists in the repo):
+
+![On-resistance by channel material](images/on_resistance_ohm_by_material.png)
