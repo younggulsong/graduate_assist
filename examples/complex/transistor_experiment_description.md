@@ -1,0 +1,7 @@
+Objective: Evaluate how transistor process variations (gate length/width, oxide thickness, channel material, and gate material) impact key device characteristics, with a focus on a new channel material (material_x).
+Hypothesis: Shorter gate lengths and thinner oxides increase drive current and transconductance but raise leakage and DIBL; strained channel materials improve mobility and Idsat; high-k stacks reduce DIBL and leakage relative to baseline. material_x is expected to outperform baseline Si/SiC by boosting carrier mobility and improving electrostatic control, resulting in higher Idsat/gm and lower leakage.
+Independent Variables: gate_length_nm, gate_width_um, oxide_thickness_nm, channel_type, channel_material, gate_material, process_variant, anneal_temp_c, anneal_time_s
+Dependent Variables: vth_v, idsat_ma, gm_mS, mobility_cm2_vs, ioff_na, subthreshold_swing_mvdec, gate_leakage_na, dibl_mv_v, on_resistance_ohm
+Controls: same test bias conditions (Vgs = Vds = 1 V), identical measurement flow, consistent die placement sampling
+Constraints: lot-to-lot variability, local die effects, and process variant tradeoffs; leakage and DIBL are sensitive to gate length scaling
+Analysis Focus: Compare material_x against Si/SiC and visualize key performance metrics (idsat_ma, gm_mS, mobility_cm2_vs, ioff_na, dibl_mv_v, subthreshold_swing_mvdec, on_resistance_ohm). Include a summary of material_x median improvements vs Si.
