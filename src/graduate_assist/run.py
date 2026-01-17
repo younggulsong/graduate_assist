@@ -9,8 +9,6 @@ from pathlib import Path
 from .artifacts import artifacts_root, write_text
 from .graph import build_graph
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
 def _load_text(path: str) -> str:
     return Path(path).read_text(encoding="utf-8")
 
@@ -44,15 +42,29 @@ def main() -> None:
         default=2,
         help="Maximum number of rebuttal rounds when reanalysis is requested.",
     )
-    parser.add_argument("--llm-model", default="gpt-4.1", help="LLM model name (default: gpt-4.1)")
+    parser.add_argument(
+        "--llm-provider",
+        default=None,
+        help="LLM provider name (openai or ollama). Defaults to env LLM_PROVIDER or openai.",
+    )
+    parser.add_argument(
+        "--llm-model",
+        default=None,
+        help="LLM model name. Defaults to env LLM_MODEL or gpt-4.1.",
+    )
     parser.add_argument("--verbose", action="store_true", help="Print agent logs to stdout")
     parser.add_argument("--test-mode", action="store_true", help="Enable test-only flow shortcuts")
     args = parser.parse_args()
 
-    os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
-    os.environ["LLM_PROVIDER"] = "openai"
-    os.environ["LLM_MODEL"] = args.llm_model
+    provider = (args.llm_provider or os.getenv("LLM_PROVIDER", "")).strip().lower()
+    if not provider:
+        provider = "openai"
+    os.environ["LLM_PROVIDER"] = provider
 
+    model = (args.llm_model or os.getenv("LLM_MODEL", "")).strip()
+    if not model:
+        model = "gpt-4.1"
+    os.environ["LLM_MODEL"] = model
     run_id = _build_run_id()
 
     state = {

@@ -7,6 +7,7 @@ import traceback
 import urllib.parse
 import urllib.request
 from pathlib import Path
+import tempfile
 from typing import Any, Dict, List, Tuple
 import re
 
@@ -23,6 +24,18 @@ def _append_log(state: GraphState, message: str) -> None:
     state["execution_log"].append(message)
     if state.get("verbose"):
         print(message)
+
+
+def _ensure_matplotlib_ready() -> None:
+    if "MPLCONFIGDIR" not in os.environ:
+        mpl_dir = Path(tempfile.gettempdir()) / "graduate_assist_mpl"
+        mpl_dir.mkdir(parents=True, exist_ok=True)
+        os.environ["MPLCONFIGDIR"] = str(mpl_dir)
+    if "XDG_CACHE_HOME" not in os.environ:
+        cache_dir = Path(tempfile.gettempdir()) / "graduate_assist_cache"
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        os.environ["XDG_CACHE_HOME"] = str(cache_dir)
+    os.environ.setdefault("MPLBACKEND", "Agg")
 
 
 def _infer_column_kind(series: pd.Series, name: str) -> str:
@@ -966,6 +979,7 @@ def execution_agent_node(state: GraphState) -> GraphState:
 
             if not results["errors"]:
                 try:
+                    _ensure_matplotlib_ready()
                     import matplotlib.pyplot as plt
 
                     fig_path = figures_dir / "group_comparison.png"

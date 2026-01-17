@@ -15,6 +15,9 @@ def generate_text(system_prompt: str, user_prompt: str) -> Optional[str]:
         return None
 
     if provider == "openai":
+        api_key = os.getenv("OPENAI_API_KEY", "").strip()
+        if not api_key:
+            raise RuntimeError("OPENAI_API_KEY is not set.")
         try:
             from openai import OpenAI
 
@@ -27,8 +30,8 @@ def generate_text(system_prompt: str, user_prompt: str) -> Optional[str]:
                 ],
             )
             return response.output_text
-        except Exception:
-            return None
+        except Exception as exc:
+            raise RuntimeError(f"OpenAI request failed: {exc}") from exc
 
     if provider == "ollama":
         try:
