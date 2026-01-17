@@ -125,3 +125,4 @@ Selected output highlights (from `artifacts/run_20260110T075312Z_53f549c0/report
 Example figure (renders if the artifact exists in the repo):
 
 ![On-resistance by channel material](images/on_resistance_ohm_by_material.png)
+![DIBL by channel material](images/dibl_mv_v_by_material.png)
